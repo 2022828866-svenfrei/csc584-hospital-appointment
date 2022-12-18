@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<head>
+    <title>Set Appointment</title>
+    <link rel="stylesheet" href="styles/styles.css">
+</head>
+<body>
+    <div class="navContainer">
+        <div class="innerNavContainer">
+            <p>
+                <a class="navButton" href="set-appointment-doctor.html">Set Appointment</a>
+                <a class="navButton" href="list-appointments-doctor.html">List My Appointments</a>
+                <a class="navButton" href="account-doctor.html">Account</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="contentContainer">
+        <div class="innerContentContainer">
+            <br>
+            <h1>Setup a new appointment</h1>
+            <p>Submit a new request for an appointment with the doctor of your choice.</p>
+            <form>
+                <table>
+                    <tr>
+                        <td>
+                            <label>Patient:</label>
+                        </td>
+                        <td>
+                            <select>
+                                <option>Sven Frei</option>
+                                <option>Nabil Saperi</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Date:</label>
+                        </td>
+                        <td>
+                            <input type="date" placeholder="01-01-2023">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Time:</label>
+                        </td>
+                        <td>
+                            <input type="time" value="13:00">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Information for Patient:</label>
+                        </td>
+                        <td>
+                            <textarea></textarea>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="2"><p class="successText">This timeslot is available.</p></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            <br>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,45 @@
+body {
+    background-color: #4545e3;
+}
+
+input, table {
+    width: 90%;
+}
+
+.contentContainer {
+    width: 60%;
+    margin-top: 5%;
+    margin-left: 20%;
+    margin-right: 20%;
+    min-height: 200px;
+    border-radius: 20px;
+    background-color: azure;
+}
+
+.innerContentContainer {
+    margin: 10%;
+}
+
+.navContainer {
+    width: 60%;
+    margin-left: 20%;
+    margin-right: 20%;
+    min-height: 40px;
+    border-radius: 20px;
+    background-color: azure;
+    align-items: center;
+}
+
+.innerNavContainer {
+    text-align: center;
+    padding: 2px 0;
+}
+
+.navButton {
+    margin-right: 20px;
+    margin-left: 20px;
+}
+
+.successText {
+    color: green;
+}

@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<head>
+    <title>List Appointments</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <style>
+        table, td {
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <div class="navContainer">
+        <div class="innerNavContainer">
+            <p>
+                <a class="navButton" href="set-appointment-doctor.html">Set Appointment</a>
+                <a class="navButton" href="list-appointments-doctor.html">List My Appointments</a>
+                <a class="navButton" href="account-doctor.html">Account</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="contentContainer">
+        <div class="innerContentContainer">
+            <br>
+            <h1>List of appointments</h1>
+            <p>See all past and future appointments of you.</p>
+            <h2>Upcoming Appointments:</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Patient</th>
+                        <th>Description</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>01.01.2023</td>
+                        <td>13:00 - 13:30</td>
+                        <td>Sven Frei</td>
+                        <td>Headache</td>
+                        <td>
+                            <a href="set-appointment.html"><input type="button" value="update"></a>
+                            <input type="button" value="delete">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br>
+  
+            <h2>Past Appointments:</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Patient</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>08.08.2022</td>
+                        <td>18:00 - 18:30</td>
+                        <td>Sven Frei</td>
+                        <td>Diarrhea</td>
+                    </tr>
+                    <tr>
+                        <td>01.02.2022</td>
+                        <td>13:00 - 13:30</td>
+                        <td>Nabil Saperi</td>
+                        <td>Stomache ache</td>
+                    </tr>
+                </tbody>
+            </table>
+            <br>
+        </div>
+    </div>
+</body>

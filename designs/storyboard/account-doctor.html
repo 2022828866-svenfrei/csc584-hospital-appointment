@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<head>
+    <title>Account</title>
+    <link rel="stylesheet" href="styles/styles.css">
+    <style>
+        .displayTable {
+            border: 1px solid;
+        }
+    </style>
+</head>
+<body>
+    <div class="navContainer">
+        <div class="innerNavContainer">
+            <p>
+                <a class="navButton" href="set-appointment-doctor.html">Set Appointment</a>
+                <a class="navButton" href="list-appointments-doctor.html">List My Appointments</a>
+                <a class="navButton" href="account-doctor.html">Account</a>
+            </p>
+        </div>
+    </div>
+
+    <div class="contentContainer">
+        <div class="innerContentContainer">
+            <br>
+            <h1>Account</h1>
+            <p>Update your user account here</p>
+            <form>
+                <table>
+                    <tr>
+                        <td>
+                            <label>Email:</label>
+                        </td>
+                        <td>
+                            <input type="text">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Full Name:</label>
+                        </td>
+                        <td>
+                            <input type="text">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Birthdate:</label>
+                        </td>
+                        <td>
+                            <input type="date">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Area of expertise:</label>
+                        </td>
+                        <td>
+                            <select>
+                                <option>Dental</option>
+                                <option>Chiropractic</option>
+                            </select>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>Password:</label>
+                        </td>
+                        <td>
+                            <input type="password">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" value="Update user information">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            
+            <br>
+
+            <h2>Add absence</h2>
+            <form>
+                <table>
+                    <tr>
+                        <td>
+                            <label>From:</label>
+                        </td>
+                        <td>
+                            <input type="date">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <label>To:</label>
+                        </td>
+                        <td>
+                            <input type="date">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="submit" value="Add absence">
+                        </td>
+                    </tr>
+                </table>
+            </form>
+            
+            <br>
+
+            <table class="displayTable">
+                <thead>
+                    <tr>
+                        <th>From</th>
+                        <th>To</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="displayTable">01.01.2022</td>
+                        <td class="displayTable">08.01.2022</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <br>
+        </div>
+    </div>
+</body>
