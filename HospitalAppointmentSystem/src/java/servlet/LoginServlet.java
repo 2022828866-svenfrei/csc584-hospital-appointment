@@ -38,7 +38,9 @@ public class LoginServlet extends HttpServlet {
                 account.getPassword() != null && !account.getEmail().isEmpty() &&
                 AccountDao.isLoginSuccessfull(account)) {
             
-            request.getRequestDispatcher("/index.html").forward(request, response);
+            request.getSession().setAttribute("account", account);
+            
+            request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
         else {
             request.setAttribute("message", "Email or password is incorrect!");
