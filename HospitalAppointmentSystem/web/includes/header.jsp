@@ -16,39 +16,37 @@
         
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg bg-light">
-            <div class="includes container-fluid">
-                <a class="navbar-brand" href="index.jsp">
-                    <img src="images/home.png" alt="Home" width="30" height="24">
-                </a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                    <% if (account != null && account.getEmail() != null) {
+        <div class="container">
+            <nav class="navbar navbar-expand-lg bg-light">
+                <div class="includes container-fluid">
+                    <a class="navbar-brand" href="index.jsp">
+                        <img src="images/home.png" alt="Home" width="30" height="24">
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <% if (account != null && account.getEmail() != null) {
+                            %>
+                            <div class="navbar-nav">
+                                <a class="nav-link" href="#">Set Appointment</a>
+                                <a class="nav-link" href="#">List My Appointments</a>
+                            </div>
+                            <%
+                        }
                         %>
-                        <div class="navbar-nav">
-                            <a class="nav-link" href="#">Set Appointment</a>
-                            <a class="nav-link" href="#">List My Appointments</a>
-                        </div>
-                        <%
-                    }
-                    %>
+                    </div>
+                    <span class="navbar-text">
+                        <% if (account != null && account.getEmail() != null) {
+                            %>
+                            <a class="nav-link" href="LogoutServlet">Logout</a>
+                            <%
+                        } else {
+                            %>
+                            <a class="nav-link" href="login.jsp">Login</a>
+                            <%
+                        }
+                        %>
+                    </span>
                 </div>
-
-                <span class="navbar-text">
-                    <% if (account != null && account.getEmail() != null) {
-                        %>
-                        <a class="nav-link" href="LogoutServlet">Logout</a>
-                        <%
-                    } else {
-                        %>
-                        <a class="nav-link" href="login.jsp">Login</a>
-                        <% 
-                    }
-                    %>
-                </span>
-            </div>
-        </nav>
-    </body>
-</html>
+            </nav>
