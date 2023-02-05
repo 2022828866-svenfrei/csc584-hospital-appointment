@@ -30,6 +30,7 @@
                         <div class="navbar-nav">
                             <a class="nav-link" href="#">Set Appointment</a>
                             <a class="nav-link" href="#">List My Appointments</a>
+                            <a class="nav-link" href="EditAccountServlet">Edit Account</a>
                         </div>
                         <%
                     }
