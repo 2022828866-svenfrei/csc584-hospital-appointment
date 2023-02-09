@@ -6,15 +6,13 @@
 package servlet;
 
 import bean.AppointmentBean;
+import dao.AccountDao;
 import dao.AppointmentDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -28,7 +26,21 @@ import javax.servlet.http.HttpServletResponse;
 @WebServlet(name = "AppointmentServlet", urlPatterns = {"/AppointmentServlet"})
 public class AppointmentServlet extends HttpServlet 
 {
-
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        String appointmentId = request.getParameter("appointmentId");
+        
+        if (appointmentId != null && !appointmentId.isEmpty()) {
+            request.setAttribute("appointment", AppointmentDao.getAppointmentById(Long.parseLong(appointmentId)));
+        }
+        
+        request.setAttribute("doctors", AccountDao.getAccounts(true));
+        request.setAttribute("patients", AccountDao.getAccounts(false));
+        
+        request.getRequestDispatcher("/CreateAppointment.jsp").forward(request, response);
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -83,6 +95,5 @@ public class AppointmentServlet extends HttpServlet
             request.getRequestDispatcher("/appointmentView.jsp").forward(request, response);
         }
         request.getRequestDispatcher("/appointmentView.jsp").forward(request, response);
-        
     }    	
 }

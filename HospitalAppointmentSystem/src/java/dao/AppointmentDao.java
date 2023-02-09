@@ -48,4 +48,41 @@ public class AppointmentDao
     public String createAppointment(AppointmentDao appointmentDao) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
+    
+    public static AppointmentBean getAppointmentById(long appointmentId) {
+        AppointmentBean appointment = null;
+        Connection con = null;
+        PreparedStatement statement = null;
+        
+        try {
+            con = DBConnection.createConnection();
+            statement = con.prepareStatement("SELECT * FROM Appointment WHERE appointmentId=?");
+            statement.setLong(1, appointmentId);
+            ResultSet rs = statement.executeQuery();
+
+            if (rs.next()) {
+                appointment = new AppointmentBean(appointmentId,
+                    rs.getLong("accountDoctorIdFK"),
+                    rs.getLong("accountPatientIdFK"),
+                    rs.getDate("date"),
+                    rs.getTime("startTime"),
+                    rs.getTime("duration"));
+            }
+
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (con != null)
+                    con.close();
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        return appointment;
+    }
 }

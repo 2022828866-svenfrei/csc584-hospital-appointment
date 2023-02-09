@@ -29,7 +29,7 @@
                         <% if (account != null && account.getEmail() != null) {
                             %>
                             <div class="navbar-nav">
-                                <a class="nav-link" href="CreateAppointment.jsp">Set Appointment</a>
+                                <a class="nav-link" href="AppointmentServlet">Set Appointment</a>
                                 <a class="nav-link" href="appointmentView.jsp">List My Appointments</a>
                             </div>
                             <%

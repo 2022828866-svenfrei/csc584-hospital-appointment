@@ -5,7 +5,12 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="bean.AccountBean"%>
 <%@include file="includes/header.jsp" %>
+
+<jsp:useBean id="appointment" scope="request" class="bean.AppointmentBean" />
+<jsp:useBean id="doctors" scope="request" class="java.util.List<bean.AccountBean>" />
+<jsp:useBean id="patients" scope="request" class="java.util.List<bean.AccountBean>" />
 <!DOCTYPE html>
 <html>
     <head>
@@ -25,29 +30,58 @@
                     
                     <br>
                     
-                    <div class="row">
-                        <div class="col"></div>
-                        <div class="col">
-                            <label>Doctor's Name:</label>
+                    <% if (account.isIsDoctor()) {
+                        %>
+                        <div class="row">
+                            <div class="col"></div>
+                            <div class="col">
+                                <label>Patient</label>
+                            </div>
+                            <div class="col">
+                                <select name="doctor">
+                                    <% for (AccountBean patient : patients) {
+                                        %>
+                                        <option class="hover-text" value="<%= patient.getAccountId()%>"
+                                                <%= patient.getAccountId()== appointment.getAccountPatientIdFK()? "selected" : ""%>>
+                                            <%= patient.getFullName() %>
+                                        </option>
+                                        <%
+                                    }
+                                    %>
+                                </select>
+                            </div>
+                            <div class="col"></div>
                         </div>
-                        <div class="col">
-                            <input name="accountDoctorId">
+                                
+                        <input hidden name="patient" value="<%= account.getAccountId() %>">
+                        <%
+                    } else {
+                        %>
+                        <div class="row">
+                            <div class="col"></div>
+                            <div class="col">
+                                <label>Doctor:</label>
+                            </div>
+                            <div class="col">
+                                <select name="doctor">
+                                    <% for (AccountBean doctor : doctors) {
+                                        %>
+                                        <option class="hover-text" value="<%= doctor.getAccountId()%>"
+                                                <%= doctor.getAccountId()== appointment.getAccountDoctorIdFK()? "selected" : ""%>>
+                                            <%= doctor.getFullName() %>
+                                        </option>
+                                        <%
+                                    }
+                                    %>
+                                </select>
+                            </div>
+                            <div class="col"></div>
                         </div>
-                        <div class="col"></div>
-                    </div>
-                    
-                    <br>
-                    
-                    <div class="row">
-                        <div class="col"></div>
-                        <div class="col">
-                            <label>Patient's Name:</label>
-                        </div>
-                        <div class="col">
-                            <input name="accountPatientId">
-                        </div>
-                        <div class="col"></div>
-                    </div>
+                                
+                        <input hidden name="patient" value="<%= account.getAccountId() %>">
+                        <%
+                    }
+                    %>
                     
                     <br>
                     
@@ -57,7 +91,7 @@
                             <label>Date</label>
                         </div>
                         <div class="col">
-                            <input name="date" type="date">
+                            <input name="date" type="date" value="<%= appointment.getDate() %>">
                         </div>
                         <div class="col"></div>
                     </div>
@@ -70,7 +104,7 @@
                             <label>Start Time: </label>
                         </div>
                         <div class="col">
-                            <input name="startTime" type="time">
+                            <input name="startTime" type="time" value="<%= appointment.getStartTime() %>">
                         </div>
                         <div class="col"></div>
                     </div>
@@ -83,7 +117,7 @@
                             <label>Duration: </label>
                         </div>
                         <div class="col">
-                            <input name="duration" type="time">
+                            <input name="duration" type="time" value="<%= appointment.getDuration() %>">
                         </div>
                         <div class="col"></div>
                     </div>
@@ -110,7 +144,7 @@
                     <div class="row">
                         <div class="col"></div>
                         <div class="col-2">
-                            <input class="btn btn-primary" type="submit" value="Create Appointment">
+                            <input class="btn btn-primary" type="submit"  value="<%= appointment.getAppointmentId() > 0 ? "Update" : "Create" %> Appointment">
                         </div>
                         <div class="col"></div>
                     </div>
