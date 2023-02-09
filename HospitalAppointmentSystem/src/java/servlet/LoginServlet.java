@@ -38,7 +38,8 @@ public class LoginServlet extends HttpServlet {
                 account.getPassword() != null && !account.getEmail().isEmpty() &&
                 AccountDao.isLoginSuccessfull(account)) {
             
-            request.getSession().setAttribute("account", account);
+            request.getSession().setAttribute("account"
+                    , AccountDao.getAccountByEmail(account.getEmail()));
             
             request.getRequestDispatcher("/index.jsp").forward(request, response);
         }
@@ -46,15 +47,5 @@ public class LoginServlet extends HttpServlet {
             request.setAttribute("message", "Email or password is incorrect!");
             request.getRequestDispatcher("/login.jsp").forward(request, response);
         }        
-    }
-
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
-    @Override
-    public String getServletInfo() {
-        return "Servlet for login processing";
     }
 }

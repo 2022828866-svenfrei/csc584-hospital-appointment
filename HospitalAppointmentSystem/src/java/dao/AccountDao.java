@@ -7,6 +7,7 @@ package dao;
 
 import bean.AccountBean;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -18,11 +19,15 @@ import util.DBConnection;
  *
  * @author frei-
  */
-public class AccountDao {    
+public class AccountDao {
     public static boolean isLoginSuccessfull(AccountBean accountBean) {
+        Connection con = null;
+        Statement statement = null;
+        boolean isLoginSuccessful = false;
+        
         try {            
-            Connection con = DBConnection.createConnection();
-            Statement statement = con.createStatement();
+            con = DBConnection.createConnection();
+            statement = con.createStatement();
             ResultSet resultSet = statement.executeQuery("select email, password from account where email='" + accountBean.getEmail() + "'");
             while (resultSet.next()) {
                 String email = resultSet.getString("email");
@@ -30,33 +35,125 @@ public class AccountDao {
                 
                 if (email.equals(accountBean.getEmail())
                         && password.equals(accountBean.getPassword())) {
-                    return true;
+                    isLoginSuccessful = true;
                 }
             }
         } catch (SQLException ex) {
             ex.printStackTrace();
+        } finally {
+            try {
+                if (con != null)
+                    con.close();
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         
-        return false;
+        return isLoginSuccessful;
     }
     
     public static boolean registerAccount(AccountBean accountBean) {
+        Connection con = null;
+        Statement statement = null;
+        boolean isInsertSuccessful = true;
+        
         try {
-            Connection con = DBConnection.createConnection();
-            Statement statement = con.createStatement();
+            con = DBConnection.createConnection();
+            statement = con.createStatement();
             int result = statement.executeUpdate("insert into Account (email, fullName, password, birthdate) "
                     + "VALUES ('" + accountBean.getEmail() + "', '"
                     + accountBean.getFullName() + "', '"
                     + accountBean.getPassword() + "', '"
                     + accountBean.getBirthDate() + "')");
             
-            return true;
-            
         } catch (SQLException ex) {
             ex.printStackTrace();
+            isInsertSuccessful = false;
+        } finally {
+            try {
+                if (con != null)
+                    con.close();
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         
-        return false;
+        return isInsertSuccessful;
+    }
+    
+    public static AccountBean getAccountByEmail(String email) {
+        AccountBean account = null;
+        Connection con = null;
+        PreparedStatement statement = null;
+        
+        if (email != null && !email.isEmpty()) {
+            try {
+                con = DBConnection.createConnection();
+                statement = con.prepareStatement("SELECT * FROM Account WHERE email=?");
+                statement.setString(1, email);
+                ResultSet rs = statement.executeQuery();
+                
+                if (rs.next()) {
+                    account = new AccountBean(rs.getLong("accountId"),
+                        rs.getLong("expertiseIdFK"),
+                        rs.getString("email"),
+                        rs.getString("fullName"),
+                        rs.getString("password"),
+                        rs.getDate("birthDate"),
+                        rs.getBoolean("isDoctor"));
+                }
+                
+                rs.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            } finally {
+                try {
+                    if (con != null)
+                        con.close();
+                    if (statement != null)
+                        statement.close();
+                } catch (SQLException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }
+        
+        return account;
+    }
+    
+    public static void updateAccount(AccountBean account) {
+        Connection con = null;
+        PreparedStatement statement = null;
+        
+        try {
+            con = DBConnection.createConnection();
+            statement = con.prepareStatement("UPDATE Account "
+                    + "SET expertiseIdFK=?, email=?, fullName=?, birthdate=?, "
+                    + "password=? "
+                    + "WHERE accountId=?");
+            statement.setLong(1, account.getExpertiseIdFK());
+            statement.setString(2, account.getEmail());
+            statement.setString(3, account.getFullName());
+            statement.setDate(4, account.getBirthDate());
+            statement.setString(5, account.getPassword());
+            statement.setLong(6, account.getAccountId());
+            statement.executeUpdate();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (con != null)
+                    con.close();
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
     }
     
     public static List<AccountBean> getAccounts(boolean isDoctor) {

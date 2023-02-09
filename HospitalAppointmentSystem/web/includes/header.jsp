@@ -31,6 +31,7 @@
                             <div class="navbar-nav">
                                 <a class="nav-link" href="AppointmentServlet">Set Appointment</a>
                                 <a class="nav-link" href="appointmentView.jsp">List My Appointments</a>
+                                <a class="nav-link" href="EditAccountServlet">Edit Account</a>
                             </div>
                             <%
                         }
