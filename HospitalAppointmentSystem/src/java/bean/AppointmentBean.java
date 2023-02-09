@@ -12,7 +12,8 @@ import java.sql.Time;
  *
  * @author frei-
  */
-public class AppointmentBean {
+public class AppointmentBean implements java.io.Serializable
+{
     private long appointmentId;
     private long accountDoctorIdFK;
     private long accountPatientIdFK;
