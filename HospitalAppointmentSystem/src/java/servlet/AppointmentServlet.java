@@ -24,7 +24,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author HYUGA
  */
 @WebServlet(name = "AppointmentServlet", urlPatterns = {"/AppointmentServlet"})
-public class AppointmentServlet extends HttpServlet 
+public class AppointmentServlet extends HttpServlet
 {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {

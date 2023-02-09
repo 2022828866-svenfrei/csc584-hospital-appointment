@@ -114,7 +114,7 @@
                     <div class="row">
                         <div class="col"></div>
                         <div class="col">
-                            <label>Duration: </label>
+                            <label>End Time: </label>
                         </div>
                         <div class="col">
                             <input name="duration" type="time" value="<%= appointment.getDuration() %>">

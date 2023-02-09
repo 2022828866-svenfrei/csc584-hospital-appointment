@@ -24,65 +24,67 @@
         <title>Appointment View</title>
     </head>
     <body>
-        <div class="container">
-            <table class="table table-striped table-hover">
-                <!-- column headers -->
-                <thead>
-                    <tr>
-                        <th>Doctor</th>
-                        <th>Patient</th>
-                        <th>Date</th>
-                        <th>Start Time</th>
-                        <th>End Time</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <!-- column data -->
-                <tbody class="table-group-divider">
-                    <% for (AppointmentBean a : appointments) {
-                        %>
+        <div class="content">
+            <div class="container">
+                <table class="table table-striped table-hover">
+                    <!-- column headers -->
+                    <thead>
                         <tr>
-                            <td>
-                                <% for (AccountBean doctor : doctors) {
-                                    if (doctor.getAccountId() == a.getAccountDoctorIdFK()) {
-                                        %>
-                                            <%= doctor.getFullName() %>
-                                        <%
-                                        break;
-                                    }
-                                }
-                                %>
-                            </td>
-                            <td>
-                                <% for (AccountBean patient : patients) {
-                                    if (patient.getAccountId() == a.getAccountPatientIdFK()) {
-                                        %>
-                                            <%= patient.getFullName() %>
-                                        <%
-                                        break;
-                                    }
-                                }
-                                %>
-                            </td>
-                            <td><%= a.getDate()%></td>
-                            <td><%= a.getStartTime()%></td>
-                            <td><%= a.getDuration()%></td>
-                            <td colspan="6">
-                                <form method="get" action="AppointmentServlet">
-                                    <input hidden name="appointmentId" value="<%= a.getAppointmentId() %>">
-                                    <input class="btn btn-primary" type="submit" value="Edit">
-                                </form>
-                                <form method="post" action="AppointmentDeleteServlet">
-                                    <input hidden name="appointmentId" value="<%= a.getAppointmentId() %>">
-                                    <input class="btn btn-danger" type="submit" value="Delete">
-                                </form>
-                            </td>
+                            <th>Doctor</th>
+                            <th>Patient</th>
+                            <th>Date</th>
+                            <th>Start Time</th>
+                            <th>End Time</th>
+                            <th>Actions</th>
                         </tr>
-                        <%
-                    }
-                    %>
-                </tbody>
-            </table>
+                    </thead>
+                    <!-- column data -->
+                    <tbody class="table-group-divider">
+                        <% for (AppointmentBean a : appointments) {
+                            %>
+                            <tr>
+                                <td>
+                                    <% for (AccountBean doctor : doctors) {
+                                        if (doctor.getAccountId() == a.getAccountDoctorIdFK()) {
+                                            %>
+                                                <%= doctor.getFullName() %>
+                                            <%
+                                            break;
+                                        }
+                                    }
+                                    %>
+                                </td>
+                                <td>
+                                    <% for (AccountBean patient : patients) {
+                                        if (patient.getAccountId() == a.getAccountPatientIdFK()) {
+                                            %>
+                                                <%= patient.getFullName() %>
+                                            <%
+                                            break;
+                                        }
+                                    }
+                                    %>
+                                </td>
+                                <td><%= a.getDate()%></td>
+                                <td><%= a.getStartTime()%></td>
+                                <td><%= a.getDuration()%></td>
+                                <td colspan="6">
+                                    <form method="get" action="AppointmentServlet">
+                                        <input hidden name="appointmentId" value="<%= a.getAppointmentId() %>">
+                                        <input class="btn btn-primary" type="submit" value="Edit">
+                                    </form>
+                                    <form method="post" action="AppointmentDeleteServlet">
+                                        <input hidden name="appointmentId" value="<%= a.getAppointmentId() %>">
+                                        <input class="btn btn-danger" type="submit" value="Delete">
+                                    </form>
+                                </td>
+                            </tr>
+                            <%
+                        }
+                        %>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <%@include file="includes/footer.jsp" %>
     </body>
