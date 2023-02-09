@@ -193,12 +193,12 @@
                 <div class="row">
                     <div class="col"></div>
                     <div class="col-6">
-                        <table>
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    <th>From Date</th>
-                                    <th>To Date</th>
-                                    <th colspan="2">Actions</th>
+                                    <th scope="col">From Date</th>
+                                    <th scope="col">To Date</th>
+                                    <th scope="col" colspan="2">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
