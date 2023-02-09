@@ -35,8 +35,7 @@ public class AppointmentServlet extends HttpServlet
             request.setAttribute("appointment", AppointmentDao.getAppointmentById(Long.parseLong(appointmentId)));
         }
         
-        request.setAttribute("doctors", AccountDao.getAccounts(true));
-        request.setAttribute("patients", AccountDao.getAccounts(false));
+        setPageBeans(request);
         
         request.getRequestDispatcher("/CreateAppointment.jsp").forward(request, response);
     }
@@ -53,14 +52,16 @@ public class AppointmentServlet extends HttpServlet
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
     {
+        AppointmentBean appointment = new AppointmentBean();
+                
         String accountDoctorIdFK = request.getParameter("accountDoctorIdFK");
         String accountPatientIdFK = request.getParameter("accountPatientIdFK");
         String date = request.getParameter("date");
         String startTime = request.getParameter("startTime");
         String duration = request.getParameter("duration");
+        String appointmentId = request.getParameter("appointmentId");
 
         String errorMessage = "";
-        String successMessage = "";
 
         if (accountDoctorIdFK.isEmpty() || accountPatientIdFK.isEmpty() || date.isEmpty() || startTime.isEmpty() || duration.isEmpty()) 
         {
@@ -69,31 +70,40 @@ public class AppointmentServlet extends HttpServlet
         else 
         {
             try {
-                AppointmentBean appointment = new AppointmentBean();
                 appointment.setAccountDoctorIdFK(Long.parseLong(accountDoctorIdFK));
                 appointment.setAccountPatientIdFK(Long.parseLong(accountPatientIdFK));
                 appointment.setDate(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(date).getTime()));
                 SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
                 appointment.setStartTime(new Time(timeFormat.parse(startTime).getTime()));
                 appointment.setDuration(new Time(timeFormat.parse(duration).getTime()));
-
-                if (AppointmentDao.createAppointment(appointment)) {
-                    successMessage = "Appointment created successfully!";
-                } else {
-                    errorMessage = "Error occurred while creating appointment!";
+                appointment.setAppointmentId(Long.parseLong(appointmentId));
+                
+                if (appointment.getAppointmentId() > 0) {               
+                    if (!AppointmentDao.updateAppointment(appointment)) {
+                        errorMessage = "Error occurred while updating appointment!";
+                    }
+                } else {                    
+                    if (!AppointmentDao.createAppointment(appointment)) {
+                        errorMessage = "Error occurred while creating appointment!";
+                    }
                 }
             } catch (ParseException ex) {
-                errorMessage = "Error occurred while creating appointment!";
+                errorMessage = "Error occurred while converting inputs!";
             }
         }
 
         if (errorMessage.length() > 0) {
             request.setAttribute("errorMessage", errorMessage);
+            request.setAttribute("appointment", appointment);
+            setPageBeans(request);
             request.getRequestDispatcher("/CreateAppointment.jsp").forward(request, response);
-        } else {
-            request.setAttribute("successMessage", successMessage);
-            request.getRequestDispatcher("/appointmentView.jsp").forward(request, response);
         }
-        request.getRequestDispatcher("/appointmentView.jsp").forward(request, response);
-    }    	
+        
+        request.getRequestDispatcher("AppointmentDisplayServlet").forward(request, response);
+    }
+    
+    private void setPageBeans(HttpServletRequest request) {        
+        request.setAttribute("doctors", AccountDao.getAccounts(true));
+        request.setAttribute("patients", AccountDao.getAccounts(false));
+    }
 }

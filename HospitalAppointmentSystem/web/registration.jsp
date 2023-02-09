@@ -76,7 +76,7 @@
                     </div>
                     <div class="row">
                         <div class="col"></div>
-                        <div class="col-2">
+                        <div class="col-2 text-danger">
                         <%
                             if (request.getAttribute("message") == null) {
                             } else {

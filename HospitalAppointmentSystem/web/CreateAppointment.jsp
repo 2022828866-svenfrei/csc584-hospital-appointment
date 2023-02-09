@@ -38,7 +38,7 @@
                                 <label>Patient</label>
                             </div>
                             <div class="col">
-                                <select name="doctor">
+                                <select name="accountPatientIdFK">
                                     <% for (AccountBean patient : patients) {
                                         %>
                                         <option class="hover-text" value="<%= patient.getAccountId()%>"
@@ -53,7 +53,7 @@
                             <div class="col"></div>
                         </div>
                                 
-                        <input hidden name="patient" value="<%= account.getAccountId() %>">
+                        <input hidden name="accountDoctorIdFK" value="<%= account.getAccountId() %>">
                         <%
                     } else {
                         %>
@@ -63,7 +63,7 @@
                                 <label>Doctor:</label>
                             </div>
                             <div class="col">
-                                <select name="doctor">
+                                <select name="accountDoctorIdFK">
                                     <% for (AccountBean doctor : doctors) {
                                         %>
                                         <option class="hover-text" value="<%= doctor.getAccountId()%>"
@@ -78,7 +78,7 @@
                             <div class="col"></div>
                         </div>
                                 
-                        <input hidden name="patient" value="<%= account.getAccountId() %>">
+                        <input hidden name="accountPatientIdFK" value="<%= account.getAccountId() %>">
                         <%
                     }
                     %>
@@ -126,7 +126,7 @@
                     
                     <div class="row">
                         <div class="col"></div>
-                        <div class="col-2">
+                        <div class="col-2 text-danger">
                         <%
                             if (request.getAttribute("message") == null) {
                             } else {
@@ -138,6 +138,8 @@
                         </div>
                         <div class="col"></div>
                     </div>
+                        
+                    <input hidden name="appointmentId" value="<%= appointment.getAppointmentId()%>">
                         
                     <br>
                     

@@ -111,7 +111,7 @@
 
                     <div class="row">
                         <div class="col"></div>
-                        <div class="col-6">
+                        <div class="col-6 text-danger">
                         <%
                             if (request.getAttribute("message") == null) {
                             } else {
@@ -166,7 +166,7 @@
                     <br>
                     <div class="row">
                         <div class="col"></div>
-                        <div class="col-6">
+                        <div class="col-6 text-danger">
                         <%
                             if (request.getAttribute("absenceMessage") == null) {
                             } else {

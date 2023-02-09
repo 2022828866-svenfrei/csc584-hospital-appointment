@@ -28,6 +28,14 @@
         <servlet-name>AbsenceDeleteServlet</servlet-name>
         <servlet-class>servlet.AbsenceDeleteServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>AppointmentDisplayServlet</servlet-name>
+        <servlet-class>servlet.AppointmentDisplayServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>AppointmentDeleteServlet</servlet-name>
+        <servlet-class>servlet.AppointmentDeleteServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginServlet</servlet-name>
         <url-pattern>/LoginServlet</url-pattern>
@@ -55,6 +63,14 @@
     <servlet-mapping>
         <servlet-name>AbsenceDeleteServlet</servlet-name>
         <url-pattern>/AbsenceDeleteServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AppointmentDisplayServlet</servlet-name>
+        <url-pattern>/AppointmentDisplayServlet</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>AppointmentDeleteServlet</servlet-name>
+        <url-pattern>/AppointmentDeleteServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

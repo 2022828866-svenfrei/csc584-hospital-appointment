@@ -16,7 +16,7 @@
         
     </head>
     <body>
-        <div class="container">
+        <div>
             <nav class="navbar navbar-expand-lg bg-light">
                 <div class="includes container-fluid">
                     <a class="navbar-brand" href="index.jsp">
@@ -30,7 +30,7 @@
                             %>
                             <div class="navbar-nav">
                                 <a class="nav-link" href="AppointmentServlet">Set Appointment</a>
-                                <a class="nav-link" href="appointmentView.jsp">List My Appointments</a>
+                                <a class="nav-link" href="AppointmentDisplayServlet">List My Appointments</a>
                                 <a class="nav-link" href="EditAccountServlet">Edit Account</a>
                             </div>
                             <%

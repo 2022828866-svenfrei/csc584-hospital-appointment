@@ -5,12 +5,15 @@
  */
 package dao;
 
+import bean.AccountBean;
 import bean.AppointmentBean;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import util.DBConnection;
 
@@ -22,31 +25,70 @@ import util.DBConnection;
 public class AppointmentDao
 {
     public static boolean createAppointment(AppointmentBean appointmentBean) {
-        try 
-        {            
-            Connection con = DBConnection.createConnection();
-            Statement statement = con.createStatement();
-            ResultSet resultSet = statement.executeQuery("select date from");
-            while (resultSet.next()) 
-            {
-                String date = resultSet.getString("date");
-                String startTime = resultSet.getString("startTime");
-                
-                if (date.equals(appointmentBean.getDate())
-                        && startTime.equals(appointmentBean.getStartTime())) {
-                    return true;
-                }
-            }
-        } catch (SQLException ex) 
-        {
+        Connection con = null;
+        PreparedStatement statement = null;
+        boolean isInsertSuccessful = true;
+        
+        try {
+            con = DBConnection.createConnection();
+            statement = con.prepareStatement("Insert into Appointment (accountDoctorIdFk, accountPatientIdFk, date, starttime, duration) Values(?,?,?,?,?)");
+            statement.setLong(1, appointmentBean.getAccountDoctorIdFK());
+            statement.setLong(2, appointmentBean.getAccountPatientIdFK());
+            statement.setDate(3, appointmentBean.getDate());
+            statement.setTime(4, appointmentBean.getStartTime());
+            statement.setTime(5, appointmentBean.getDuration());
+            
+            statement.executeUpdate();            
+        } catch (SQLException ex) {
             ex.printStackTrace();
+            isInsertSuccessful = false;
+        } finally {
+            try {
+                if (con != null)
+                    con.close();
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
         }
         
-        return false;
+        return isInsertSuccessful;
     }
 
-    public String createAppointment(AppointmentDao appointmentDao) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public static boolean updateAppointment(AppointmentBean appointmentBean) {
+        Connection con = null;
+        PreparedStatement statement = null;
+        boolean isInsertSuccessful = true;
+        
+        try {
+            con = DBConnection.createConnection();
+            statement = con.prepareStatement("Update Appointment Set "
+                    + "accountDoctorIdFk=?, accountPatientIdFk=?, date=?, starttime=?, duration=? "
+                    + "Where appointmentId=?");
+            statement.setLong(1, appointmentBean.getAccountDoctorIdFK());
+            statement.setLong(2, appointmentBean.getAccountPatientIdFK());
+            statement.setDate(3, appointmentBean.getDate());
+            statement.setTime(4, appointmentBean.getStartTime());
+            statement.setTime(5, appointmentBean.getDuration());
+            statement.setLong(6, appointmentBean.getAppointmentId());
+            
+            statement.executeUpdate();            
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            isInsertSuccessful = false;
+        } finally {
+            try {
+                if (con != null)
+                    con.close();
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        return isInsertSuccessful;
     }
     
     public static AppointmentBean getAppointmentById(long appointmentId) {
@@ -84,5 +126,65 @@ public class AppointmentDao
         }
         
         return appointment;
+    }
+    
+    public static List<AppointmentBean> getAppointmentsByAccount(long accountId) {
+        List<AppointmentBean> appointments = new ArrayList<>();
+        Connection con = null;
+        Statement statement = null;
+        
+        try {            
+            con = DBConnection.createConnection();
+            statement = con.createStatement();
+            ResultSet rs = statement.executeQuery("SELECT * FROM Appointment WHERE accountDoctorIdFK="+accountId+" OR accountPatientIdFK="+accountId); 
+            while (rs.next()) {
+                appointments.add(new AppointmentBean(rs.getLong("appointmentId"),
+                    rs.getLong("accountDoctorIdFK"),
+                    rs.getLong("accountPatientIdFK"),
+                    rs.getDate("date"),
+                    rs.getTime("startTime"),
+                    rs.getTime("duration")));
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        } finally {
+            try {
+                if (con != null)
+                    con.close();
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        return appointments;
+    }
+    
+    public static boolean deleteAppointmentById(long appointmentId) {
+        Connection con = null;
+        Statement statement = null;
+        boolean isDeleteSuccessful = true;
+        
+        try {            
+            con = DBConnection.createConnection();
+            statement = con.createStatement();
+            statement.executeUpdate("DELETE FROM Appointment "
+                    + "WHERE appointmentId=" + appointmentId);
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            isDeleteSuccessful=false;
+        } finally {
+            try {
+                if (con != null)
+                    con.close();
+                if (statement != null)
+                    statement.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+        }
+        
+        return isDeleteSuccessful;
     }
 }

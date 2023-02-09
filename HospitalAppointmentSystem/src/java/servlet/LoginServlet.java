@@ -38,6 +38,8 @@ public class LoginServlet extends HttpServlet {
                 account.getPassword() != null && !account.getEmail().isEmpty() &&
                 AccountDao.isLoginSuccessfull(account)) {
             
+            account = AccountDao.getAccountByEmail(account.getEmail());
+            
             request.getSession().setAttribute("account"
                     , AccountDao.getAccountByEmail(account.getEmail()));
             
