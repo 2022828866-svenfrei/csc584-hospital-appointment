@@ -5,7 +5,9 @@
  */
 package servlet;
 
+import bean.AbsenceBean;
 import bean.AppointmentBean;
+import dao.AbsenceDao;
 import dao.AccountDao;
 import dao.AppointmentDao;
 import java.io.IOException;
@@ -91,10 +93,31 @@ public class AppointmentServlet extends HttpServlet
                 errorMessage = "Error occurred while converting inputs!";
             }
         }
+        
+        AbsenceBean absence = new AbsenceBean();
+        
+        String fromDate = request.getParameter("fromDate");
+        String toDate = request.getParameter("toDate");
+        
+        if (date == fromDate && date == toDate) {
+            try {
+                
+                absence.setFromDate(new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(fromDate).getTime()));
+                absence.setToDate(new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(toDate).getTime()));
+
+                if (appointment.getDate() == absence.getFromDate() && appointment.getDate() == absence.getToDate()) {
+                    errorMessage = "The Person is Absence that day!";
+                }
+                
+            } catch (Exception ex) {
+                    errorMessage = "The Person is Absence that day!";
+            }
+        }
 
         if (errorMessage.length() > 0) {
             request.setAttribute("errorMessage", errorMessage);
             request.setAttribute("appointment", appointment);
+            request.setAttribute("absence", absence);
             setPageBeans(request);
             request.getRequestDispatcher("/CreateAppointment.jsp").forward(request, response);
         }
