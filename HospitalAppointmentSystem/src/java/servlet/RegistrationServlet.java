@@ -50,6 +50,9 @@ public class RegistrationServlet extends HttpServlet {
                 if (account.getEmail() != null && !account.getEmail().isEmpty() &&
                         account.getFullName() != null && !account.getFullName().isEmpty() &&
                         AccountDao.registerAccount(account)) {
+            
+                    request.getSession().setAttribute("account"
+                            , AccountDao.getAccountByEmail(account.getEmail()));
                     
                     request.getRequestDispatcher("/index.jsp").forward(request, response);
                     return;
