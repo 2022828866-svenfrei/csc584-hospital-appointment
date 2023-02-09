@@ -99,20 +99,18 @@ public class AppointmentServlet extends HttpServlet
         String fromDate = request.getParameter("fromDate");
         String toDate = request.getParameter("toDate");
         
-        if (date == fromDate && date == toDate) {
             try {
                 
                 absence.setFromDate(new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(fromDate).getTime()));
                 absence.setToDate(new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(toDate).getTime()));
 
                 if (appointment.getDate() == absence.getFromDate() && appointment.getDate() == absence.getToDate()) {
-                    errorMessage = "The Person is Absence that day!";
+                    errorMessage = "The Person is Absence on that day!";
                 }
-                
+        
             } catch (Exception ex) {
-                    errorMessage = "The Person is Absence that day!";
+                    errorMessage = "The Person is Absence on that day!";
             }
-        }
 
         if (errorMessage.length() > 0) {
             request.setAttribute("errorMessage", errorMessage);
