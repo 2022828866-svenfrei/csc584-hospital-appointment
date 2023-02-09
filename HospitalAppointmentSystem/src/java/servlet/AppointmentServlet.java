@@ -10,7 +10,11 @@ import dao.AppointmentDao;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.sql.Date;
+import java.sql.Time;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -34,7 +38,7 @@ public class AppointmentServlet extends HttpServlet
      * @throws ServletException if a servlet-specific error occurs
      * @throws IOException if an I/O error occurs
      */
-    
+    @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException 
     {
         String accountDoctorIdFK = request.getParameter("accountDoctorIdFK");
@@ -52,20 +56,22 @@ public class AppointmentServlet extends HttpServlet
         }
         else 
         {
-            AppointmentBean appointment = new AppointmentBean();
-            appointment.setAccountDoctorIdFK(accountDoctorIdFK);
-            appointment.setAccountPatientIdFK(accountPatientIdFK);
-            appointment.setDate(date);
-            appointment.setStartTime(startTime);
-            appointment.setDuration(startTime);
+            try {
+                AppointmentBean appointment = new AppointmentBean();
+                appointment.setAccountDoctorIdFK(Long.parseLong(accountDoctorIdFK));
+                appointment.setAccountPatientIdFK(Long.parseLong(accountPatientIdFK));
+                appointment.setDate(new Date(new SimpleDateFormat("yyyy-MM-dd").parse(date).getTime()));
+                SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
+                appointment.setStartTime(new Time(timeFormat.parse(startTime).getTime()));
+                appointment.setDuration(new Time(timeFormat.parse(duration).getTime()));
 
-            AppointmentDao appointmentDao = new AppointmentDao();
-            String createApp = appointmentDao.createAppointment(appointmentBean);
-
-            if (createApp.equals("SUCCESS")) {
-                successMessage = "Appointment created successfully!";
-            } else {
-                errorMessage = "Error occurred while creating appointment: " + createApp;
+                if (AppointmentDao.createAppointment(appointment)) {
+                    successMessage = "Appointment created successfully!";
+                } else {
+                    errorMessage = "Error occurred while creating appointment!";
+                }
+            } catch (ParseException ex) {
+                errorMessage = "Error occurred while creating appointment!";
             }
         }
 
