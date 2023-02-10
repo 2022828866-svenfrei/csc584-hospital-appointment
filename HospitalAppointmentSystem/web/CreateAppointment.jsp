@@ -114,7 +114,7 @@
                     <div class="row">
                         <div class="col"></div>
                         <div class="col">
-                            <label>Duration: </label>
+                            <label>End Time: </label>
                         </div>
                         <div class="col">
                             <input name="duration" type="time" value="<%= appointment.getDuration() %>">
@@ -126,12 +126,12 @@
                     
                     <div class="row">
                         <div class="col"></div>
-                        <div class="col-2 text-danger">
+                        <div class="col-6 text-danger">
                         <%
-                            if (request.getAttribute("message") == null) {
+                            if (request.getAttribute("errorMessage") == null) {
                             } else {
                                 %>
-                                <%= request.getAttribute("message") %>
+                                <%= request.getAttribute("errorMessage") %>
                                 <%
                             }
                         %>

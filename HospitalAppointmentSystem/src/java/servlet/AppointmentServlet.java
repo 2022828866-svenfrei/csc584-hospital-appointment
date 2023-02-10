@@ -5,7 +5,9 @@
  */
 package servlet;
 
+import bean.AbsenceBean;
 import bean.AppointmentBean;
+import dao.AbsenceDao;
 import dao.AccountDao;
 import dao.AppointmentDao;
 import java.io.IOException;
@@ -13,6 +15,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -24,8 +27,8 @@ import javax.servlet.http.HttpServletResponse;
  * @author HYUGA
  */
 @WebServlet(name = "AppointmentServlet", urlPatterns = {"/AppointmentServlet"})
-public class AppointmentServlet extends HttpServlet 
-{
+public class AppointmentServlet extends HttpServlet
+{    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
@@ -78,13 +81,22 @@ public class AppointmentServlet extends HttpServlet
                 appointment.setDuration(new Time(timeFormat.parse(duration).getTime()));
                 appointment.setAppointmentId(Long.parseLong(appointmentId));
                 
-                if (appointment.getAppointmentId() > 0) {               
-                    if (!AppointmentDao.updateAppointment(appointment)) {
-                        errorMessage = "Error occurred while updating appointment!";
-                    }
-                } else {                    
-                    if (!AppointmentDao.createAppointment(appointment)) {
-                        errorMessage = "Error occurred while creating appointment!";
+                if (!appointment.getDuration().after(appointment.getStartTime())) {
+                    errorMessage = "The start time must be greater than the end time!";
+                }
+                else if (isDateOccupied(appointment.getDate(), appointment.getAccountDoctorIdFK())) {
+                    errorMessage = "The doctor is absent on that day!";
+                } else if (isDateOccupied(appointment.getDate(), appointment.getAccountPatientIdFK())) {
+                    errorMessage = "The patient is absent on that day!";
+                } else {
+                    if (appointment.getAppointmentId() > 0) {               
+                        if (!AppointmentDao.updateAppointment(appointment)) {
+                            errorMessage = "Error occurred while updating appointment!";
+                        }
+                    } else {                    
+                        if (!AppointmentDao.createAppointment(appointment)) {
+                            errorMessage = "Error occurred while creating appointment!";
+                        }
                     }
                 }
             } catch (ParseException ex) {
@@ -100,6 +112,12 @@ public class AppointmentServlet extends HttpServlet
         }
         
         request.getRequestDispatcher("AppointmentDisplayServlet").forward(request, response);
+    }
+    
+    private boolean isDateOccupied(Date date, long accountId) {
+        List<AbsenceBean> absences = AbsenceDao.getAbsencesByAccount(accountId);
+        
+        return absences.stream().anyMatch(a -> !date.before(a.getFromDate()) && !date.after(a.getToDate()));
     }
     
     private void setPageBeans(HttpServletRequest request) {        

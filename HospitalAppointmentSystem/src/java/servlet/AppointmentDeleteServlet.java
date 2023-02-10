@@ -26,8 +26,7 @@ public class AppointmentDeleteServlet extends HttpServlet {
         
         AppointmentDao.deleteAppointmentById(Long.parseLong(appointmentId));
         
-        request.getRequestDispatcher("AppointmentDisplayServlet").forward(request, response);
-        
+        request.getRequestDispatcher("AppointmentDisplayServlet").forward(request, response);    
     }
 
 }
