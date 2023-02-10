@@ -69,8 +69,12 @@ public class EditAccountServlet extends HttpServlet {
                 accountUpdate.setFullName(request.getParameter("name"));
                 accountUpdate.setBirthDate(
                         new Date(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("birthdate")).getTime()));
-                accountUpdate.setExpertiseIdFK(Long.parseLong(request.getParameter("expertise")));
                 accountUpdate.setIsDoctor(account.isIsDoctor());
+                
+                String expertise = request.getParameter("expertise");
+                if (expertise != null && !expertise.isEmpty()) {
+                    accountUpdate.setExpertiseIdFK(Long.parseLong(expertise));
+                } 
                 
                 if (accountUpdate.getEmail() != null && !accountUpdate.getEmail().isEmpty() &&
                         accountUpdate.getFullName() != null && !accountUpdate.getFullName().isEmpty()) {
