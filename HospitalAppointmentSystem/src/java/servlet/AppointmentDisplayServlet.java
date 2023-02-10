@@ -6,13 +6,14 @@
 package servlet;
 
 import bean.AccountBean;
+import bean.AppointmentBean;
 import dao.AccountDao;
 import dao.AppointmentDao;
-import dao.ExpertiseDao;
 import java.io.IOException;
-import java.io.PrintWriter;
 import java.sql.Date;
-import java.util.stream.Collectors;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -27,9 +28,18 @@ public class AppointmentDisplayServlet extends HttpServlet {
     private void handleRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         AccountBean account = (AccountBean)request.getSession().getAttribute("account");
-        request.setAttribute("appointments", AppointmentDao.getAppointmentsByAccount(account.getAccountId()).stream()
-                .filter(a -> a.getDate().compareTo(new Date(new java.util.Date().getTime())) > 0)
-                .collect(Collectors.toList()));
+        
+        List<AppointmentBean> appointments = AppointmentDao.getAppointmentsByAccount(account.getAccountId());
+        Collections.sort(appointments,
+                new Comparator<AppointmentBean>() {
+                    public int compare(AppointmentBean o1, AppointmentBean o2) {
+                       Date a = o1.getDate();
+                       Date b = o2.getDate();
+                       return b.compareTo(a);
+                    }
+                });
+        
+        request.setAttribute("appointments", appointments);
         request.setAttribute("doctors", AccountDao.getAccounts(true));
         request.setAttribute("patients", AccountDao.getAccounts(false));
         

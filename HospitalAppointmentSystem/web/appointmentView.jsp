@@ -1,3 +1,5 @@
+<%@page import="java.util.Calendar"%>
+<%@page import="java.sql.Date"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@taglib prefix="sql" uri="http://java.sun.com/jsp/jstl/sql"%>
 <%-- 
@@ -14,6 +16,20 @@
 <jsp:useBean id="appointments" scope="request" class="java.util.List<bean.AppointmentBean>" />
 <jsp:useBean id="doctors" scope="request" class="java.util.List<bean.AccountBean>" />
 <jsp:useBean id="patients" scope="request" class="java.util.List<bean.AccountBean>" />
+<%! 
+    Calendar calendar = Calendar.getInstance();
+    Date today;
+%>
+
+<%
+    calendar.set(Calendar.HOUR_OF_DAY, 0);
+    calendar.set(Calendar.MINUTE, 0);
+    calendar.set(Calendar.SECOND, 0);
+    calendar.set(Calendar.MILLISECOND, 0);
+    
+    today = new Date(calendar.getTime().getTime());
+%>
+
 <!DOCTYPE html>
 <html>
     <head>
@@ -71,11 +87,11 @@
                                 <td colspan="6">
                                     <form method="get" action="AppointmentServlet">
                                         <input hidden name="appointmentId" value="<%= a.getAppointmentId() %>">
-                                        <input class="btn btn-primary" type="submit" value="Edit">
+                                        <input class="btn btn-primary" type="submit" value="Edit" <%= a.getDate().before(today) ? "disabled" : ""  %>>
                                     </form>
                                     <form method="post" action="AppointmentDeleteServlet">
                                         <input hidden name="appointmentId" value="<%= a.getAppointmentId() %>">
-                                        <input class="btn btn-danger" type="submit" value="Delete">
+                                        <input class="btn btn-danger" type="submit" value="Delete" <%= a.getDate().before(today) ? "disabled" : ""  %>>
                                     </form>
                                 </td>
                             </tr>

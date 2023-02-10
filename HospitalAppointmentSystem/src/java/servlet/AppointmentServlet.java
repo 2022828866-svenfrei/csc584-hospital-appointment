@@ -15,6 +15,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.List;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -27,7 +28,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "AppointmentServlet", urlPatterns = {"/AppointmentServlet"})
 public class AppointmentServlet extends HttpServlet
-{
+{    
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
@@ -80,47 +81,43 @@ public class AppointmentServlet extends HttpServlet
                 appointment.setDuration(new Time(timeFormat.parse(duration).getTime()));
                 appointment.setAppointmentId(Long.parseLong(appointmentId));
                 
-                if (appointment.getAppointmentId() > 0) {               
-                    if (!AppointmentDao.updateAppointment(appointment)) {
-                        errorMessage = "Error occurred while updating appointment!";
-                    }
-                } else {                    
-                    if (!AppointmentDao.createAppointment(appointment)) {
-                        errorMessage = "Error occurred while creating appointment!";
+                if (!appointment.getDuration().after(appointment.getStartTime())) {
+                    errorMessage = "The start time must be greater than the end time!";
+                }
+                else if (isDateOccupied(appointment.getDate(), appointment.getAccountDoctorIdFK())) {
+                    errorMessage = "The doctor is absent on that day!";
+                } else if (isDateOccupied(appointment.getDate(), appointment.getAccountPatientIdFK())) {
+                    errorMessage = "The patient is absent on that day!";
+                } else {
+                    if (appointment.getAppointmentId() > 0) {               
+                        if (!AppointmentDao.updateAppointment(appointment)) {
+                            errorMessage = "Error occurred while updating appointment!";
+                        }
+                    } else {                    
+                        if (!AppointmentDao.createAppointment(appointment)) {
+                            errorMessage = "Error occurred while creating appointment!";
+                        }
                     }
                 }
             } catch (ParseException ex) {
                 errorMessage = "Error occurred while converting inputs!";
             }
         }
-        
-        AbsenceBean absence = new AbsenceBean();
-        
-        String fromDate = request.getParameter("fromDate");
-        String toDate = request.getParameter("toDate");
-        
-            try {
-                
-                absence.setFromDate(new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(fromDate).getTime()));
-                absence.setToDate(new java.sql.Date(new SimpleDateFormat("yyyy-MM-dd").parse(toDate).getTime()));
-
-                if (appointment.getDate() == absence.getFromDate() && appointment.getDate() == absence.getToDate()) {
-                    errorMessage = "The Person is Absence on that day!";
-                }
-        
-            } catch (Exception ex) {
-                    errorMessage = "The Person is Absence on that day!";
-            }
 
         if (errorMessage.length() > 0) {
             request.setAttribute("errorMessage", errorMessage);
             request.setAttribute("appointment", appointment);
-            request.setAttribute("absence", absence);
             setPageBeans(request);
             request.getRequestDispatcher("/CreateAppointment.jsp").forward(request, response);
         }
         
         request.getRequestDispatcher("AppointmentDisplayServlet").forward(request, response);
+    }
+    
+    private boolean isDateOccupied(Date date, long accountId) {
+        List<AbsenceBean> absences = AbsenceDao.getAbsencesByAccount(accountId);
+        
+        return absences.stream().anyMatch(a -> !date.before(a.getFromDate()) && !date.after(a.getToDate()));
     }
     
     private void setPageBeans(HttpServletRequest request) {        
