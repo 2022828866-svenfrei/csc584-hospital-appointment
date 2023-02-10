@@ -11,6 +11,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.ArrayList;
 import java.util.List;
 import util.DBConnection;
@@ -135,7 +136,11 @@ public class AccountDao {
                     + "SET expertiseIdFK=?, email=?, fullName=?, birthdate=?, "
                     + "password=? "
                     + "WHERE accountId=?");
-            statement.setLong(1, account.getExpertiseIdFK());
+            if (account.getExpertiseIdFK() == null) {
+                statement.setNull(1, Types.INTEGER);
+            } else {
+                statement.setLong(1, account.getExpertiseIdFK());
+            }
             statement.setString(2, account.getEmail());
             statement.setString(3, account.getFullName());
             statement.setDate(4, account.getBirthDate());
