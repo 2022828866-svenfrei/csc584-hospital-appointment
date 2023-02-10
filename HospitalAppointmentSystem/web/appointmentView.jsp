@@ -16,17 +16,16 @@
 <jsp:useBean id="appointments" scope="request" class="java.util.List<bean.AppointmentBean>" />
 <jsp:useBean id="doctors" scope="request" class="java.util.List<bean.AccountBean>" />
 <jsp:useBean id="patients" scope="request" class="java.util.List<bean.AccountBean>" />
-<%! 
+<%!
     Calendar calendar = Calendar.getInstance();
     Date today;
 %>
 
-<%
-    calendar.set(Calendar.HOUR_OF_DAY, 0);
+<%    calendar.set(Calendar.HOUR_OF_DAY, 0);
     calendar.set(Calendar.MINUTE, 0);
     calendar.set(Calendar.SECOND, 0);
     calendar.set(Calendar.MILLISECOND, 0);
-    
+
     today = new Date(calendar.getTime().getTime());
 %>
 
@@ -57,49 +56,56 @@
                     <!-- column data -->
                     <tbody class="table-group-divider">
                         <% for (AppointmentBean a : appointments) {
-                            %>
-                            <tr>
-                                <td>
-                                    <% for (AccountBean doctor : doctors) {
+                        %>
+                        <tr>
+                            <td>
+                                <% for (AccountBean doctor : doctors) {
                                         if (doctor.getAccountId() == a.getAccountDoctorIdFK()) {
-                                            %>
-                                                <%= doctor.getFullName() %>
-                                            <%
+                                %>
+                                <%= doctor.getFullName()%>
+                                <%
                                             break;
                                         }
                                     }
-                                    %>
-                                </td>
-                                <td>
-                                    <% for (AccountBean patient : patients) {
+                                %>
+                            </td>
+                            <td>
+                                <% for (AccountBean patient : patients) {
                                         if (patient.getAccountId() == a.getAccountPatientIdFK()) {
-                                            %>
-                                                <%= patient.getFullName() %>
-                                            <%
+                                %>
+                                <%= patient.getFullName()%>
+                                <%
                                             break;
                                         }
                                     }
-                                    %>
-                                </td>
-                                <td><%= a.getDate()%></td>
-                                <td><%= a.getStartTime()%></td>
-                                <td><%= a.getDuration()%></td>
-                                <td colspan="6">
-                                    <form method="get" action="AppointmentServlet">
-                                        <input hidden name="appointmentId" value="<%= a.getAppointmentId() %>">
-                                        <input class="btn btn-primary" type="submit" value="Edit" <%= a.getDate().before(today) ? "disabled" : ""  %>>
-                                    </form>
-                                    <form method="post" action="AppointmentDeleteServlet">
-                                        <input hidden name="appointmentId" value="<%= a.getAppointmentId() %>">
-                                        <input class="btn btn-danger" type="submit" value="Delete" <%= a.getDate().before(today) ? "disabled" : ""  %>>
-                                    </form>
-                                </td>
-                            </tr>
-                            <%
-                        }
+                                %>
+                            </td>
+                            <td><%= a.getDate()%></td>
+                            <td><%= a.getStartTime()%></td>
+                            <td><%= a.getDuration()%></td>
+                            <td colspan="6">
+                                <form method="get" action="AppointmentServlet">
+                                    <input hidden name="appointmentId" value="<%= a.getAppointmentId()%>">
+                                    <input class="btn btn-primary" type="submit" value="Edit" <%= a.getDate().before(today) ? "disabled" : ""%>>
+                                </form>
+                                <form method="post" action="AppointmentDeleteServlet">
+                                    <input hidden name="appointmentId" value="<%= a.getAppointmentId()%>">
+                                    <input onclick="confirmDelete(event)" class="btn btn-danger" type="submit" value="Delete" <%= a.getDate().before(today) ? "disabled" : ""%>>
+                                </form>
+                            </td>
+                        </tr>
+                        <%
+                            }
                         %>
                     </tbody>
                 </table>
+                <script>
+                    function confirmDelete(event) {
+                        if (!confirm('Are you sure you want to delete this appointment?')) {
+                            event.preventDefault();
+                        }
+                    }
+                </script>
             </div>
         </div>
         <%@include file="includes/footer.jsp" %>
